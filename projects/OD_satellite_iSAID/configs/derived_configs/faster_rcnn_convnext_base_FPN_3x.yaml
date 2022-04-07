@@ -22,3 +22,5 @@ INPUT:
 
 DATALOADER:
   NUM_WORKERS: 2
+
+OUTPUT_DIR: "convnext_B_FPN_1k_weights"

@@ -195,6 +195,7 @@ def setup(args):
     # Now in cfg, we need to add these datasets:
     cfg.DATASETS.TRAIN = ("ISAID_train",)
     cfg.DATASETS.TEST = ("ISAID_val",)
+    os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 
     # Now change the head of detector according to this dataset
     # Remember that model (generalized rcnn class) has 3 modules:

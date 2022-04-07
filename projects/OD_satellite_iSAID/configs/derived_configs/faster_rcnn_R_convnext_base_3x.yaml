@@ -21,3 +21,5 @@ DATALOADER:
 
 INPUT:
   FORMAT: "RGB"
+
+OUTPUT_DIR: "convnext_B_1k_weights"

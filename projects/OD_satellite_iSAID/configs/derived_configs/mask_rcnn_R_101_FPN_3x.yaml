@@ -14,3 +14,4 @@ SOLVER:
   BASE_LR: 0.00025
 DATALOADER:
   NUM_WORKERS: 2
+OUTPUT_DIR: "maskrcnn_image1k_pretraining"

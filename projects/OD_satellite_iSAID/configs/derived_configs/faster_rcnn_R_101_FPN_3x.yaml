@@ -8,8 +8,10 @@ MODEL:
     BATCH_SIZE_PER_IMAGE: 128
     NUM_CLASSES: 15
   ANCHOR_GENERATOR:
-    SIZES: [[35], [68], [87], [130], [149]]  # One size for each in feature map
-    ASPECT_RATIOS: [[1.1], [1.2], [1.4], [1.8], [2.7]]  # Three aspect ratios (same for all in feature maps)
+    SIZES: [[16], [32], [64], [128], [256], [512], [1024]]  # One size for each in feature map
+    ASPECT_RATIOS: [[0.33, 0.5, 1.0, 2.0, 3.0]]  # Three aspect ratios (same for all in feature maps)
+  RPN:
+    IN_FEATURES: [ "p2","p2","p3", "p4", "p5", "p6", "p6"]
 SOLVER:
   STEPS: (60000, 80000)
   MAX_ITER: 90000

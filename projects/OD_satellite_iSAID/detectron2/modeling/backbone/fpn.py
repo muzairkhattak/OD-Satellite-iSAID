@@ -11,7 +11,9 @@ from .backbone import Backbone
 from .build import BACKBONE_REGISTRY
 from .resnet import build_resnet_backbone
 from .resnet import convnext_base
-__all__ = ["build_convnext_fpn_backbone", "build_resnet_fpn_backbone", "build_retinanet_resnet_fpn_backbone", "FPN"]
+from .swintransformer import build_swintransformer_backbone
+
+__all__ = ["build_swintransformer_fpn_backbone", "build_convnext_fpn_backbone", "build_resnet_fpn_backbone", "build_retinanet_resnet_fpn_backbone", "FPN"]
 
 
 class FPN(Backbone):
@@ -23,7 +25,7 @@ class FPN(Backbone):
     _fuse_type: torch.jit.Final[str]
 
     def __init__(
-        self, bottom_up, in_features, out_channels, norm="", top_block=None, fuse_type="sum"
+            self, bottom_up, in_features, out_channels, norm="", top_block=None, fuse_type="sum"
     ):
         """
         Args:
@@ -130,7 +132,7 @@ class FPN(Backbone):
 
         # Reverse feature maps into top-down order (from low to high resolution)
         for idx, (lateral_conv, output_conv) in enumerate(
-            zip(self.lateral_convs, self.output_convs)
+                zip(self.lateral_convs, self.output_convs)
         ):
             # Slicing of ModuleList is not supported https://github.com/pytorch/pytorch/issues/47336
             # Therefore we loop over all modules but skip the first one
@@ -255,10 +257,27 @@ def build_retinanet_resnet_fpn_backbone(cfg, input_shape: ShapeSpec):
     return backbone
 
 
-
 @BACKBONE_REGISTRY.register()
 def build_convnext_fpn_backbone(cfg, input_shape):
     bottom_up = convnext_base(cfg, input_shape)
+    in_features = cfg.MODEL.FPN.IN_FEATURES
+    out_channels = cfg.MODEL.FPN.OUT_CHANNELS
+    backbone = FPN(
+        bottom_up=bottom_up,
+        in_features=in_features,
+        out_channels=out_channels,
+        norm=cfg.MODEL.FPN.NORM,
+        top_block=LastLevelMaxPool(),
+        fuse_type=cfg.MODEL.FPN.FUSE_TYPE,
+    )
+    return backbone
+
+
+@BACKBONE_REGISTRY.register()
+def build_swintransformer_fpn_backbone(cfg, input_shape: ShapeSpec):
+    """
+    """
+    bottom_up = build_swintransformer_backbone(cfg, input_shape)
     in_features = cfg.MODEL.FPN.IN_FEATURES
     out_channels = cfg.MODEL.FPN.OUT_CHANNELS
     backbone = FPN(

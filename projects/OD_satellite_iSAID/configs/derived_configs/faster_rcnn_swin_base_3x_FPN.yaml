@@ -1,0 +1,31 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+MODEL:
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  WEIGHTS: "/home/uzair.khattak/CV703/detectron_project/swin_base_patch4_window7_224_22k.pkl"
+  MASK_ON: False
+#  SWIN:
+#    SIZE: B-22k
+#    OUT_FEATURES: (1, 2, 3)
+  FPN:
+    IN_FEATURES: ["swin0", "swin1", "swin2", "swin3"]
+  RESNETS:
+    DEPTH: 101
+  BACKBONE:
+    NAME: "build_swintransformer_fpn_backbone"
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 128
+    NUM_CLASSES: 15
+SOLVER:
+  STEPS: (210000, 250000)
+  MAX_ITER: 270000
+  IMS_PER_BATCH: 3
+  BASE_LR: 0.00025
+
+INPUT:
+  FORMAT: "RGB"
+
+DATALOADER:
+  NUM_WORKERS: 2
+
+OUTPUT_DIR: "convnext_B_FPN_1k_weights"

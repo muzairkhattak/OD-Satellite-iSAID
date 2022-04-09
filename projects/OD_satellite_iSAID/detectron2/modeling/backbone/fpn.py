@@ -12,8 +12,8 @@ from .build import BACKBONE_REGISTRY
 from .resnet import build_resnet_backbone
 from .resnet import convnext_base
 from .swintransformer import build_swintransformer_backbone
-
-__all__ = ["build_swintransformer_fpn_backbone", "build_convnext_fpn_backbone", "build_resnet_fpn_backbone", "build_retinanet_resnet_fpn_backbone", "FPN"]
+from .timm_backbone import build_timm_backbone
+__all__ = ["build_p67_timm_fpn_backbone", "build_swintransformer_fpn_backbone", "build_convnext_fpn_backbone", "build_resnet_fpn_backbone", "build_retinanet_resnet_fpn_backbone", "FPN"]
 
 
 class FPN(Backbone):
@@ -278,6 +278,23 @@ def build_swintransformer_fpn_backbone(cfg, input_shape: ShapeSpec):
     """
     """
     bottom_up = build_swintransformer_backbone(cfg, input_shape)
+    in_features = cfg.MODEL.FPN.IN_FEATURES
+    out_channels = cfg.MODEL.FPN.OUT_CHANNELS
+    backbone = FPN(
+        bottom_up=bottom_up,
+        in_features=in_features,
+        out_channels=out_channels,
+        norm=cfg.MODEL.FPN.NORM,
+        top_block=LastLevelMaxPool(),
+        fuse_type=cfg.MODEL.FPN.FUSE_TYPE,
+    )
+    return backbone
+
+@BACKBONE_REGISTRY.register()
+def build_p67_timm_fpn_backbone(cfg, input_shape):
+    """
+    """
+    bottom_up = build_timm_backbone(cfg, input_shape)
     in_features = cfg.MODEL.FPN.IN_FEATURES
     out_channels = cfg.MODEL.FPN.OUT_CHANNELS
     backbone = FPN(

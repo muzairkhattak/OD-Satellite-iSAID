@@ -45,7 +45,13 @@ _C.MODEL.PIXEL_MEAN = [103.530, 116.280, 123.675]
 # Otherwise, you can use [57.375, 57.120, 58.395] (ImageNet std)
 _C.MODEL.PIXEL_STD = [1.0, 1.0, 1.0]
 
+# Custom defaults related to timm backbone
 
+_C.MODEL.TIMM = CN()
+_C.MODEL.TIMM.BASE_NAME = 'resnet50'
+_C.MODEL.TIMM.OUT_LEVELS = (2, 3, 4, 5)
+_C.MODEL.TIMM.NORM = 'FrozenBN'
+_C.MODEL.TIMM.FREEZE_AT = 0
 # -----------------------------------------------------------------------------
 # INPUT
 # -----------------------------------------------------------------------------

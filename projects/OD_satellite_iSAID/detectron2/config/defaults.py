@@ -296,6 +296,18 @@ _C.MODEL.ROI_BOX_HEAD = CN()
 # C4 don't use head name option
 # Options for non-C4 models: FastRCNNConvFCHead,
 _C.MODEL.ROI_BOX_HEAD.NAME = ""
+# Flag for Sigmoid CE, IA 2 in one, both federated loss and
+# sigmoid CE loss feature
+_C.MODEL.ROI_BOX_HEAD.USE_SIGMOID_CE = False
+_C.MODEL.ROI_BOX_HEAD.IGNORE_ZERO_CATS = False
+_C.MODEL.ROI_BOX_HEAD.PRIOR_PROB = 0.01
+_C.MODEL.ROI_BOX_HEAD.USE_FED_LOSS = False  # Federated Loss
+_C.MODEL.ROI_BOX_HEAD.CAT_FREQ_PATH = \
+    './iSAID_cat_info.json'
+_C.MODEL.ROI_BOX_HEAD.FED_LOSS_NUM_CAT = 5
+_C.MODEL.ROI_BOX_HEAD.FED_LOSS_FREQ_WEIGHT = 0.5
+_C.MODEL.ROI_BOX_HEAD.USE_FOCAL_LOSS = ''
+
 # Options are: "smooth_l1", "giou", "diou", "ciou"
 _C.MODEL.ROI_BOX_HEAD.BBOX_REG_LOSS_TYPE = "smooth_l1"
 # The final scaling coefficient on the box regression loss, used to balance the magnitude of its

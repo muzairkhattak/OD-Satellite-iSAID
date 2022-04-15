@@ -127,12 +127,10 @@ class StandardRPNHead(nn.Module):
                                                           kernel_size=3, stride=1, padding=1)),
                                                ("relu", nn.ReLU(inplace=True)),
                                                ]))
-
-        self.batch_norm = nn.BatchNorm2d(cur_channels)
-        # self.linear1 = nn.Linear(cur_channels, cur_channels // 2, bias=True)
-        # self.linear2 = nn.Linear(cur_channels // 2, cur_channels, bias=True)
-        # self.nonlin2 = nn.Sigmoid()
-        # self.relu = nn.ReLU(inplace=True)
+        self.linear1 = nn.Linear(cur_channels, cur_channels // 2, bias=True)
+        self.linear2 = nn.Linear(cur_channels // 2, cur_channels, bias=True)
+        self.nonlin2 = nn.Sigmoid()
+        self.relu = nn.ReLU(inplace=True)
         # 1x1 conv for predicting box2box transform deltas
         self.anchor_deltas = nn.Conv2d(cur_channels, num_anchors * box_dim, kernel_size=1, stride=1)
 
@@ -191,12 +189,16 @@ class StandardRPNHead(nn.Module):
         pred_anchor_deltas = []
         for x in features:
             t = self.conv(x)
+            # Just change this a bit
+            t = F.avg_pool2d(x, kernel_size=t.size()[2:4])
+            # Now use squeeze and excitation layer
+            y = t.permute(0, 2, 3, 1)
+            y = self.relu(self.linear1(y))
+            y = self.nonlin2(self.linear2(y))
+            y = y.permute(0, 3, 1, 2)
+            y = x * y
 
-            y = torch.add(x, t)
-
-            # Apply batch norm
-
-            y = self.batch_norm(y)
+            y = torch.add(x, y)
 
             pred_objectness_logits.append(self.objectness_logits(y))
             pred_anchor_deltas.append(self.anchor_deltas(y))

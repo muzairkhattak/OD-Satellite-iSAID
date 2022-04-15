@@ -115,17 +115,15 @@ class StandardRPNHead(nn.Module):
         self.objectness_logits = nn.Conv2d(cur_channels, num_anchors, kernel_size=1, stride=1)
 
         # Simply use:
-
-        self.conv = nn.Sequential(OrderedDict([("norm1", nn.BatchNorm2d(cur_channels)),
-                                               ("conv1",
-                                                nn.Conv2d(cur_channels, cur_channels//2,
-                                                          kernel_size=3, stride=1, padding=1)),
+        self.conv = nn.Sequential(OrderedDict([("conv1", nn.Conv2d(cur_channels, cur_channels // 2,
+                                                                   kernel_size=3, stride=1, padding=1)),
                                                ("relu", nn.ReLU(inplace=True)),
-                                               ("norm2", nn.BatchNorm2d(cur_channels//2)),
+                                               ("norm2", nn.BatchNorm2d(cur_channels // 2)),
                                                ("conv2",
-                                                nn.Conv2d(cur_channels//2, cur_channels,
+                                                nn.Conv2d(cur_channels // 2, cur_channels,
                                                           kernel_size=3, stride=1, padding=1)),
                                                ("relu", nn.ReLU(inplace=True)),
+                                               ("norm1", nn.BatchNorm2d(cur_channels))
                                                ]))
         self.linear1 = nn.Linear(cur_channels, cur_channels // 2, bias=True)
         self.linear2 = nn.Linear(cur_channels // 2, cur_channels, bias=True)

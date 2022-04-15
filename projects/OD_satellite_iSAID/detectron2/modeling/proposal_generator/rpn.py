@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 import torch.nn.functional as F
 from torch import nn
-
+from collections import OrderedDict
 from detectron2.config import configurable
 from detectron2.layers import Conv2d, ShapeSpec, cat
 from detectron2.structures import Boxes, ImageList, Instances, pairwise_iou
@@ -26,7 +26,6 @@ objectness classification and bounding box regression for anchors.
 The registered object will be called with `obj(cfg, input_shape)`.
 The call should return a `nn.Module` object.
 """
-
 
 """
 Shape shorthand in this module:
@@ -74,7 +73,7 @@ class StandardRPNHead(nn.Module):
 
     @configurable
     def __init__(
-        self, *, in_channels: int, num_anchors: int, box_dim: int = 4, conv_dims: List[int] = (-1,)
+            self, *, in_channels: int, num_anchors: int, box_dim: int = 4, conv_dims: List[int] = (-1,)
     ):
         """
         NOTE: this interface is experimental.
@@ -114,6 +113,24 @@ class StandardRPNHead(nn.Module):
                 cur_channels = out_channels
         # 1x1 conv for predicting objectness logits
         self.objectness_logits = nn.Conv2d(cur_channels, num_anchors, kernel_size=1, stride=1)
+
+        # Simply use:
+
+        self.conv = nn.Sequential(OrderedDict([("norm1", nn.BatchNorm2d(cur_channels)),
+                                               ("conv1",
+                                                nn.Conv2d(cur_channels, cur_channels,
+                                                          kernel_size=3, stride=1, padding=1)),
+                                               ("relu", nn.ReLU(inplace=True)),
+                                               ("norm2", nn.BatchNorm2d(cur_channels)),
+                                               ("conv2",
+                                                nn.Conv2d(cur_channels, cur_channels,
+                                                          kernel_size=3, stride=1, padding=1)),
+                                               ("relu", nn.ReLU(inplace=True)),
+                                               ]))
+        self.linear1 = nn.Linear(cur_channels, cur_channels // 2, bias=True)
+        self.linear2 = nn.Linear(cur_channels // 2, cur_channels, bias=True)
+        self.nonlin2 = nn.Sigmoid()
+        self.relu = nn.ReLU(inplace=True)
         # 1x1 conv for predicting box2box transform deltas
         self.anchor_deltas = nn.Conv2d(cur_channels, num_anchors * box_dim, kernel_size=1, stride=1)
 
@@ -146,7 +163,7 @@ class StandardRPNHead(nn.Module):
         num_anchors = anchor_generator.num_anchors
         box_dim = anchor_generator.box_dim
         assert (
-            len(set(num_anchors)) == 1
+                len(set(num_anchors)) == 1
         ), "Each level must have the same number of anchors per spatial position"
         return {
             "in_channels": in_channels,
@@ -172,8 +189,19 @@ class StandardRPNHead(nn.Module):
         pred_anchor_deltas = []
         for x in features:
             t = self.conv(x)
-            pred_objectness_logits.append(self.objectness_logits(t))
-            pred_anchor_deltas.append(self.anchor_deltas(t))
+            # Just change this a bit
+            t = F.avg_pool2d(x, kernel_size=t.size()[2:4])
+            # Now use squeeze and excitation layer
+            y = t.permute(0, 2, 3, 1)
+            y = self.relu(self.linear1(y))
+            y = self.nonlin2(self.linear2(y))
+            y = y.permute(0, 3, 1, 2)
+            y = x * y
+
+            y = torch.add(x, y)
+
+            pred_objectness_logits.append(self.objectness_logits(y))
+            pred_anchor_deltas.append(self.anchor_deltas(y))
         return pred_objectness_logits, pred_anchor_deltas
 
 
@@ -185,23 +213,23 @@ class RPN(nn.Module):
 
     @configurable
     def __init__(
-        self,
-        *,
-        in_features: List[str],
-        head: nn.Module,
-        anchor_generator: nn.Module,
-        anchor_matcher: Matcher,
-        box2box_transform: Box2BoxTransform,
-        batch_size_per_image: int,
-        positive_fraction: float,
-        pre_nms_topk: Tuple[float, float],
-        post_nms_topk: Tuple[float, float],
-        nms_thresh: float = 0.7,
-        min_box_size: float = 0.0,
-        anchor_boundary_thresh: float = -1.0,
-        loss_weight: Union[float, Dict[str, float]] = 1.0,
-        box_reg_loss_type: str = "smooth_l1",
-        smooth_l1_beta: float = 0.0,
+            self,
+            *,
+            in_features: List[str],
+            head: nn.Module,
+            anchor_generator: nn.Module,
+            anchor_matcher: Matcher,
+            box2box_transform: Box2BoxTransform,
+            batch_size_per_image: int,
+            positive_fraction: float,
+            pre_nms_topk: Tuple[float, float],
+            post_nms_topk: Tuple[float, float],
+            nms_thresh: float = 0.7,
+            min_box_size: float = 0.0,
+            anchor_boundary_thresh: float = -1.0,
+            loss_weight: Union[float, Dict[str, float]] = 1.0,
+            box_reg_loss_type: str = "smooth_l1",
+            smooth_l1_beta: float = 0.0,
     ):
         """
         NOTE: this interface is experimental.
@@ -305,7 +333,7 @@ class RPN(nn.Module):
     @torch.jit.unused
     @torch.no_grad()
     def label_and_sample_anchors(
-        self, anchors: List[Boxes], gt_instances: List[Instances]
+            self, anchors: List[Boxes], gt_instances: List[Instances]
     ) -> Tuple[List[torch.Tensor], List[torch.Tensor]]:
         """
         Args:
@@ -364,12 +392,12 @@ class RPN(nn.Module):
 
     @torch.jit.unused
     def losses(
-        self,
-        anchors: List[Boxes],
-        pred_objectness_logits: List[torch.Tensor],
-        gt_labels: List[torch.Tensor],
-        pred_anchor_deltas: List[torch.Tensor],
-        gt_boxes: List[torch.Tensor],
+            self,
+            anchors: List[Boxes],
+            pred_objectness_logits: List[torch.Tensor],
+            gt_labels: List[torch.Tensor],
+            pred_anchor_deltas: List[torch.Tensor],
+            gt_boxes: List[torch.Tensor],
     ) -> Dict[str, torch.Tensor]:
         """
         Return the losses from a set of RPN predictions and their associated ground-truth.
@@ -429,10 +457,10 @@ class RPN(nn.Module):
         return losses
 
     def forward(
-        self,
-        images: ImageList,
-        features: Dict[str, torch.Tensor],
-        gt_instances: Optional[List[Instances]] = None,
+            self,
+            images: ImageList,
+            features: Dict[str, torch.Tensor],
+            gt_instances: Optional[List[Instances]] = None,
     ):
         """
         Args:
@@ -461,8 +489,8 @@ class RPN(nn.Module):
         pred_anchor_deltas = [
             # (N, A*B, Hi, Wi) -> (N, A, B, Hi, Wi) -> (N, Hi, Wi, A, B) -> (N, Hi*Wi*A, B)
             x.view(x.shape[0], -1, self.anchor_generator.box_dim, x.shape[-2], x.shape[-1])
-            .permute(0, 3, 4, 1, 2)
-            .flatten(1, -2)
+                .permute(0, 3, 4, 1, 2)
+                .flatten(1, -2)
             for x in pred_anchor_deltas
         ]
 
@@ -480,11 +508,11 @@ class RPN(nn.Module):
         return proposals, losses
 
     def predict_proposals(
-        self,
-        anchors: List[Boxes],
-        pred_objectness_logits: List[torch.Tensor],
-        pred_anchor_deltas: List[torch.Tensor],
-        image_sizes: List[Tuple[int, int]],
+            self,
+            anchors: List[Boxes],
+            pred_objectness_logits: List[torch.Tensor],
+            pred_anchor_deltas: List[torch.Tensor],
+            image_sizes: List[Tuple[int, int]],
     ):
         """
         Decode all the predicted box regression deltas to proposals. Find the top proposals

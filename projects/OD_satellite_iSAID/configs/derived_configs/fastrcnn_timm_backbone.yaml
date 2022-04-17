@@ -7,17 +7,35 @@ MODEL:
   RESNETS:
     DEPTH: 101
   BACKBONE:
+    #
     NAME: "build_p67_timm_fpn_backbone"
   ROI_HEADS:
     BATCH_SIZE_PER_IMAGE: 128
     NUM_CLASSES: 15
   TIMM:
-    BASE_NAME: resnetv2_101x1_bitm
+    BASE_NAME: resnetv2_101x1_bitm_in21k
+  # RPN:
+  #   BBOX_REG_LOSS_TYPE: "giou"
+  #   BBOX_REG_LOSS_WEIGHT: 2.0
+  # ROI_BOX_HEAD:
+  #   BBOX_REG_LOSS_TYPE: "giou"
+  #   BBOX_REG_LOSS_WEIGHT: 10.0
+  ANCHOR_GENERATOR:
+    SIZES: [[16], [64], [128], [256], [512]]  # One size for each in feature map
+  RPN:
+    IN_FEATURES: ["p2", "p3", "p4", "p5", "p6"]
+    PRE_NMS_TOPK_TRAIN: 3000  # Per FPN level
+    PRE_NMS_TOPK_TEST: 1000  # Per FPN level
+    # Detectron1 uses 2000 proposals per-batch,
+    # (See "modeling/rpn/rpn_outputs.py" for details of this legacy issue)
+    # which is approximately 1000 proposals per-image since the default batch size for FPN is 2.
+    POST_NMS_TOPK_TRAIN: 3000
+    POST_NMS_TOPK_TEST: 1000
 SOLVER:
-  STEPS: (60000, 80000)
-  MAX_ITER: 90000
+  STEPS: (480000, 520000)
+  MAX_ITER: 540000
   IMS_PER_BATCH: 2
-  BASE_LR: 0.00025
+  BASE_LR: 0.0007
 
 INPUT:
   FORMAT: "RGB"

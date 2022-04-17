@@ -5,7 +5,6 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 import math
-from collections import OrderedDict
 from fvcore.nn import sigmoid_focal_loss
 from fvcore.nn import sigmoid_focal_loss_star_jit
 from detectron2.config import configurable
@@ -14,7 +13,7 @@ from detectron2.modeling.box_regression import Box2BoxTransform, _dense_box_regr
 from detectron2.structures import Boxes, Instances
 from detectron2.utils.events import get_event_storage
 from ..utils import get_fed_loss_inds, load_class_freq
-
+from collections import OrderedDict
 __all__ = ["fast_rcnn_inference", "FastRCNNOutputLayers"]
 
 logger = logging.getLogger(__name__)
@@ -233,12 +232,12 @@ class FastRCNNOutputLayers(nn.Module):
         self.cls_score = nn.Linear(input_size, num_classes + 1)
         num_bbox_reg_classes = 1 if cls_agnostic_bbox_reg else num_classes
         box_dim = len(box2box_transform.weights)
-        # Simply use:
-        self.meta = nn.Sequential(OrderedDict([("conv1", nn.Linear(input_size, input_size // 2)),
-                                               ("relu", nn.ReLU(inplace=True)),
-                                               ("conv2",
-                                                nn.Linear(input_size // 2, input_size))]))
-        self.norm = nn.LayerNorm(input_size)
+        # # Simply use:
+        # self.meta = nn.Sequential(OrderedDict([("linear1", nn.Linear(input_size, input_size)),
+        #                                        ("relu", nn.ReLU(inplace=True)),
+        #                                        ("linear2",
+        #                                         nn.Linear(input_size, input_size))]))
+        # self.norm = nn.LayerNorm(input_size)
         self.bbox_pred = nn.Linear(input_size, num_bbox_reg_classes * box_dim)
         self.use_sigmoid_ce = use_sigmoid_ce
         self.use_fed_loss = use_fed_loss
@@ -318,12 +317,13 @@ class FastRCNNOutputLayers(nn.Module):
             Second tensor: bounding box regression deltas for each box. Shape is shape (N,Kx4),
             or (N,4) for class-agnostic regression.
         """
-
         if x.dim() > 2:
             x = torch.flatten(x, start_dim=1)
-        y = self.meta(x)
-        x = x + y
-        x = self.norm(x)
+        # y = self.meta(x)
+        # x = y + x
+
+        # x = self.norm(x)
+
         scores = self.cls_score(x)
         proposal_deltas = self.bbox_pred(x)
         return scores, proposal_deltas

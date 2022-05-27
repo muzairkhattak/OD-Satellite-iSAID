@@ -4,4 +4,4 @@ Object Detection (OD) in aerial images has gained much attention due to its appl
 
 
 ## Technical Report 
-Complete technical report can be viewed [here]([https://pages.github.com/](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/technical_report.pdf)).
+Complete technical report can be viewed [here](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/technical_report.pdf).

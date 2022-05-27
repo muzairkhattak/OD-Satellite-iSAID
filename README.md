@@ -55,7 +55,7 @@ isaid_dataset_root-folder/
 ## Training and Evaluation  
 
 ### Training
-We implement our code as seperate project in detectron2, so first `cd` to the project folder by running the following commad.
+We implement our code as seperate project in detectron2, so first `cd` to the project folder by running the following command.
 
   ```bash
  $ cd projects/OD_satellite_iSAID/

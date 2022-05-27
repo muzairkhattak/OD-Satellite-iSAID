@@ -19,6 +19,12 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
  # Install matplotlib for visualizations
  python -m pip install -U matplotlib
  ```
+ 
+ Now clone this repository:
+  ```shell
+ git clone https://github.com/MUKhattak/OD-Satellite-iSAID.git
+ cd OD-Satellite-iSAID/
+```
 
 ## Command-line parameters
 | Parameter          | Discription                                                                                                                 |
@@ -43,6 +49,7 @@ isaid_dataset_root-folder/
         ├─ .......
     ├─ instancesonly_filtered_val.json
 ```
+
 
 
 ## Training and Evaluation  

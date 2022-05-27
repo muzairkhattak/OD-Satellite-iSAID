@@ -95,12 +95,21 @@ To train a Faster R-CNN FPN-R101 with focal loss, run the following command
   ```bash
  $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_focal_loss.yaml --isaid-path /path/to/isaid/root/folder
 ```
+We have also provided additional config files which can be explored at ```projects/OD_satellite_iSAID/configs/derived_configs```
 
 #### Combining different components in a single config file
 You can use the different configurations together (e.g using specific backbone and loss function together) by merging the respective config files, and use the new config file for training.
 
 #### Other modifications
-We also explore other architectural modifications in the vanilla Faster R-CNN detector, please refer to our report and [base config](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/configs/Base-RCNN-FPN.yaml) file for additional details.
+We also explore other architectural and training modifications in the vanilla Faster R-CNN detector, please refer to our [report](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/technical_report.pdf) and [base config](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/configs/Base-RCNN-FPN.yaml) file for additional details.
 
+### Evaluation
+To evaluate a trained model on the iSAID validation set, run the following command
+  ```bash
+ $ python plain_train_net.py --config-file ./path/to/custom/config/file --eval-only --isaid-path /path/to/isaid/root/folder
+```
 
+## Grounth-truth and prediction visualizations
+We also provide a jupyter notebook for visualizing the GT and predicted bounding boxes on respective images for qualitative results.
+Please refer to this path to view the notebook ```projects/OD_satellite_iSAID/Detectron2_Faster-RCNN_iSAID.ipynb``` (or click [here](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/Detectron2_Faster-RCNN_iSAID.ipynb)).
 

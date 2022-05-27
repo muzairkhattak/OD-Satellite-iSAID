@@ -104,6 +104,7 @@ To train a Faster R-CNN FPN-R101 with focal loss, run the following command
 ```
 We have also provided additional config files which can be explored at ```projects/OD_satellite_iSAID/configs/derived_configs```
 Further, other hyperparameters such as learning rate, iteration number can be modified in the config file.
+
 #### Combining different components in a single config file
 You can use the different configurations together (e.g using specific backbone and loss function together) by merging the respective config files, and use the new config file for training.
 

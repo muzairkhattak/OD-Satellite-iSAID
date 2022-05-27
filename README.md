@@ -20,4 +20,41 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
  python -m pip install -U matplotlib
  ```
 
+## Command-line parameters
+| Parameter          | Discription                                                                                                                 |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| config-file        | path to the config file which you want to run e.g --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml       |
+| isaid-path         | path to the iSAID dataset folder                                                                                            |
+
+## Dataset
+We use iSAID dataset: A Large-scale Dataset for Instance Segmentation in Aerial Images[1]. Our code expects the dataset folder to have the following structure,
+
+```
+isaid_dataset_root-folder/
+└─ train
+    ├─ images
+        ├─ P1207_1800_2600_1200_2000.png
+        ├─ P1207_1800_2600_1800_2600.png
+        ├─ .......
+    ├─ instancesonly_filtered_train.json
+└─ val
+    ├─ images
+        ├─ P1557_3000_3800_0_800.png
+        ├─ .......
+    ├─ instancesonly_filtered_val.json
+```
+
+
 ## Training and Evaluation  
+
+### Training
+We implement our code as seperate project in detectron2, so first `cd` to the project folder by running the following commad.
+
+  ```bash
+ $ cd projects/OD_satellite_iSAID/
+```
+To train a vanilla Faster R-CNN with FPN-R101 backbone,run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_R_101_FPN_3x.yaml --isaid-path /path/to/isaid/root/folder
+```

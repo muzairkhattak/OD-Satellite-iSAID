@@ -12,7 +12,7 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
  ```shell
  conda create -n detectron_OD python=3.8
  conda activate detectron_OD
- # Install Pytorch
+ # Install torch and torchvision
  pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
  # Install Detectron2 (for more details visit : https://detectron2.readthedocs.io/en/latest/tutorials/install.html)
  python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'

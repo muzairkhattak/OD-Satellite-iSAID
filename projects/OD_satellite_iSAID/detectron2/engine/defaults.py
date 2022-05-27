@@ -120,6 +120,11 @@ Run on multiple machines:
         "--machine-rank", type=int, default=0, help="the rank of this machine (unique per machine)"
     )
 
+    parser.add_argument(
+        "--isaid-path", type=str, default='/apps/local/shared/CV703/datasets/iSAID/iSAID_patches',
+        help="the path to folder where train, test and val sub-folders exist"
+    )
+
     # PyTorch still may leave orphan processes in multi-gpu training.
     # Therefore we use a deterministic way to obtain port,
     # so that users are aware of orphan processes by seeing the port occupied.

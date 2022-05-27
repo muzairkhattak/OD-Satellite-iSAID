@@ -4,6 +4,7 @@ MODEL:
   MASK_ON: False
   RESNETS:
     DEPTH: 101
+    DEFORM_ON_PER_STAGE: [False, True, True, False]
   ROI_HEADS:
     BATCH_SIZE_PER_IMAGE: 128
     NUM_CLASSES: 15

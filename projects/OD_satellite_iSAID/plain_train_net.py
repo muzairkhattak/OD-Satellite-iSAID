@@ -176,22 +176,18 @@ def setup(args):
     cfg = get_cfg()
     cfg.merge_from_file(args.config_file)
     cfg.merge_from_list(args.opts)
-    # Do some changes to resolve cuda out of memory error
-    # cfg.DATALOADER.NUM_WORKERS = 2
-    # cfg.SOLVER.IMS_PER_BATCH = 3
-    # cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
     # Need to load custom dataset (iSAID)
     # If dataset is already in COCO format (images dir + json annotations file)
     # we can simply load it into detectron2
-    train_json = '/apps/local/shared/CV703/datasets/iSAID/iSAID_patches/train/instancesonly_filtered_train.json'
-    train_images = '/apps/local/shared/CV703/datasets/iSAID/iSAID_patches/train/images/'
+    dataset_path = args.isaid_path
+    train_json = dataset_path + '/train/instancesonly_filtered_train.json'
+    train_images = dataset_path + '/train/images/'
     # Register dataset for training loader
     register_coco_instances('ISAID_train', {}, train_json, train_images)
     # Register dataset for validation loader
-    val_json = '/apps/local/shared/CV703/datasets/iSAID/iSAID_patches/val/instancesonly_filtered_val.json'
-    val_images = '/apps/local/shared/CV703/datasets/iSAID/iSAID_patches/val/images/'
+    val_json = dataset_path + '/val/instancesonly_filtered_val.json'
+    val_images = dataset_path + '/val/images/'
     register_coco_instances('ISAID_val', {}, val_json, val_images)
-    # cfg.freeze()
     # Now in cfg, we need to add these datasets:
     cfg.DATASETS.TRAIN = ("ISAID_train",)
     cfg.DATASETS.TEST = ("ISAID_val",)
@@ -201,11 +197,6 @@ def setup(args):
     # Remember that model (generalized rcnn class) has 3 modules:
     # (1) Backbone (2) RPN (proposal generator) (3) ROI_HEAD
     # These all three are allowed to be re-registered
-    # cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128  # faster (default: 512)
-    # cfg.MODEL.ROI_HEADS.NUM_CLASSES = 15
-
-    # Lets change the backbone from list of available backbones:
-    # cfg.MODEL.BACKBONE.NAME = 'BasicStem'
     default_setup(
         cfg, args
     )  # if you don't like any of the default setup, write your own setup code

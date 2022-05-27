@@ -29,8 +29,8 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
 ## Command-line parameters
 | Parameter          | Description                                                                                                                 |
 |--------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| config-file        | path to the config file which you want to run e.g --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml       |
-| isaid-path         | path to the iSAID dataset folder                                                                                            |
+| --config-file      | path to the config file which you want to run e.g --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml       |
+| --isaid-path       | path to the iSAID dataset folder                                                                                            |
 
 ## Dataset
 We use iSAID dataset[1]. You can download the dataset from [here](https://captain-whu.github.io/iSAID/dataset.html). Our code expects the dataset folder to have the following structure,

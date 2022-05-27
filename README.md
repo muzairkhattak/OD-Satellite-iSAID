@@ -33,7 +33,7 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
 | isaid-path         | path to the iSAID dataset folder                                                                                            |
 
 ## Dataset
-We use iSAID dataset: A Large-scale Dataset for Instance Segmentation in Aerial Images[1]. Our code expects the dataset folder to have the following structure,
+We use iSAID dataset[1]. Our code expects the dataset folder to have the following structure,
 
 ```
 isaid_dataset_root-folder/
@@ -120,3 +120,5 @@ To evaluate a trained model on the iSAID validation set, run the following comma
 We also provide a jupyter notebook for visualizing the GT and predicted bounding boxes on respective images for qualitative results.
 Please refer to this path to view the notebook ```projects/OD_satellite_iSAID/Detectron2_Faster-RCNN_iSAID.ipynb``` (or click [here](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/Detectron2_Faster-RCNN_iSAID.ipynb)).
 
+## References
+[1]Waqas Zamir, Syed, et al. "isaid: A large-scale dataset for instance segmentation in aerial images." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops. 2019.

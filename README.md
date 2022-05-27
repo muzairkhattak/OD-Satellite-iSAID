@@ -29,8 +29,8 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
 ## Command-line parameters
 | Parameter          | Description                                                                                                                 |
 |--------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| config-file        | path to the config file which you want to run e.g --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml       |
-| isaid-path         | path to the iSAID dataset folder                                                                                            |
+| --config-file      | path to the config file which you want to run e.g --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml       |
+| --isaid-path       | path to the iSAID dataset folder                                                                                            |
 
 ## Dataset
 We use iSAID dataset[1]. You can download the dataset from [here](https://captain-whu.github.io/iSAID/dataset.html). Our code expects the dataset folder to have the following structure,
@@ -103,6 +103,7 @@ To train a Faster R-CNN FPN-R101 with focal loss, run the following command
  $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_focal_loss.yaml --isaid-path /path/to/isaid/root/folder
 ```
 We have also provided additional config files which can be explored at ```projects/OD_satellite_iSAID/configs/derived_configs```
+Further, other hyperparameters such as learning rate, iteration number can be modified in the config file.
 
 #### Combining different components in a single config file
 You can use the different configurations together (e.g using specific backbone and loss function together) by merging the respective config files, and use the new config file for training.

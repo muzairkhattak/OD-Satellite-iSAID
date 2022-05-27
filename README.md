@@ -33,7 +33,7 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavl
 | isaid-path         | path to the iSAID dataset folder                                                                                            |
 
 ## Dataset
-We use iSAID dataset[1]. Our code expects the dataset folder to have the following structure,
+We use iSAID dataset[1]. You can download the dataset from [here](https://captain-whu.github.io/iSAID/dataset.html). Our code expects the dataset folder to have the following structure,
 
 ```
 isaid_dataset_root-folder/

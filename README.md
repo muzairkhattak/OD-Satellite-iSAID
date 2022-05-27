@@ -1,68 +1,7 @@
-<img src=".github/Detectron2-Logo-Horz.svg" width="300" >
+# Object Detection in Aerial Images: A Case Study on Performance Improvement
 
-<a href="https://opensource.facebook.com/support-ukraine">
-  <img src="https://img.shields.io/badge/Support-Ukraine-FFD500?style=flat&labelColor=005BBB" alt="Support Ukraine - Help Provide Humanitarian Aid to Ukraine." />
-</a>
+Object Detection (OD) in aerial images has gained much attention due to its applications in search and rescue, town planning, and agriculture yield prediction etc. Recently introduced large-scale aerial images dataset, iSAID has enabled the researchers to advance the OD tasks on satellite images. Unfortunately, the available OD pipelines and ready-to-train architectures are well-tailored and configured to be used with tasks dealing with natural images. In this work, we study that directly using the available object detectors, specifically the vanilla Faster RCNN with FPN is sub-optimal for aerial OD. To help improve its performance, we tailor the Faster R-CNN architecture and propose several modifications including changes in architecture in different blocks of detector, training \& transfer learning strategies, loss formulations, and other pre-post processing techniques. By adopting the proposed modifications on top of the vanilla Faster-RCNN, we push the performance of the model and achieve an absolute gain of 4.44 AP over the vanilla Faster R-CNN on the iSAID validation set.
 
-Detectron2 is Facebook AI Research's next generation library
-that provides state-of-the-art detection and segmentation algorithms.
-It is the successor of
-[Detectron](https://github.com/facebookresearch/Detectron/)
-and [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/).
-It supports a number of computer vision research projects and production applications in Facebook.
 
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/1381301/66535560-d3422200-eace-11e9-9123-5535d469db19.png"/>
-</div>
-<br>
-
-## Learn More about Detectron2
-
-Explain Like I’m 5: Detectron2            |  Using Machine Learning with Detectron2
-:-------------------------:|:-------------------------:
-[![Explain Like I’m 5: Detectron2](https://img.youtube.com/vi/1oq1Ye7dFqc/0.jpg)](https://www.youtube.com/watch?v=1oq1Ye7dFqc)  |  [![Using Machine Learning with Detectron2](https://img.youtube.com/vi/eUSgtfK4ivk/0.jpg)](https://www.youtube.com/watch?v=eUSgtfK4ivk)
-
-## What's New
-* Includes new capabilities such as panoptic segmentation, Densepose, Cascade R-CNN, rotated bounding boxes, PointRend,
-  DeepLab, etc.
-* Used as a library to support building [research projects](projects/) on top of it.
-* Models can be exported to TorchScript format or Caffe2 format for deployment.
-* It [trains much faster](https://detectron2.readthedocs.io/notes/benchmarks.html).
-
-See our [blog post](https://ai.facebook.com/blog/-detectron2-a-pytorch-based-modular-object-detection-library-/)
-to see more demos and learn about detectron2.
-
-## Installation
-
-See [installation instructions](https://detectron2.readthedocs.io/tutorials/install.html).
-
-## Getting Started
-
-See [Getting Started with Detectron2](https://detectron2.readthedocs.io/tutorials/getting_started.html),
-and the [Colab Notebook](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)
-to learn about basic usage.
-
-Learn more at our [documentation](https://detectron2.readthedocs.org).
-And see [projects/](projects/) for some projects that are built on top of detectron2.
-
-## Model Zoo and Baselines
-
-We provide a large set of baseline results and trained models available for download in the [Detectron2 Model Zoo](MODEL_ZOO.md).
-
-## License
-
-Detectron2 is released under the [Apache 2.0 license](LICENSE).
-
-## Citing Detectron2
-
-If you use Detectron2 in your research or wish to refer to the baseline results published in the [Model Zoo](MODEL_ZOO.md), please use the following BibTeX entry.
-
-```BibTeX
-@misc{wu2019detectron2,
-  author =       {Yuxin Wu and Alexander Kirillov and Francisco Massa and
-                  Wan-Yen Lo and Ross Girshick},
-  title =        {Detectron2},
-  howpublished = {\url{https://github.com/facebookresearch/detectron2}},
-  year =         {2019}
-}
-```
+## Technical Report 
+Complete technical report can be viewed [here](https://pages.github.com/).

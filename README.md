@@ -53,8 +53,54 @@ We implement our code as seperate project in detectron2, so first `cd` to the pr
   ```bash
  $ cd projects/OD_satellite_iSAID/
 ```
-To train a vanilla Faster R-CNN with FPN-R101 backbone,run the following command
+#### Using different backbones
+To train a vanilla Faster R-CNN with FPN-R101 backbone, run the following command
 
   ```bash
  $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_R_101_FPN_3x.yaml --isaid-path /path/to/isaid/root/folder
 ```
+
+To train a Faster R-CNN with ConvNext-Base backbone, run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_convnext_base_FPN_3x.yaml --isaid-path /path/to/isaid/root/folder
+```
+To train a Faster R-CNN with SWIN-Base backbone, run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_swin_base_3x_FPN.yaml --isaid-path /path/to/isaid/root/folder
+```
+To train a Faster R-CNN with timm-based ResNet-BiT backbone, run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/fastrcnn_timm_backbone.yaml --isaid-path /path/to/isaid/root/folder
+```
+Note: To use any other backbone from timm (pytorch image models), you may need to change slightly change the config file and ```timm_backbone.py```[here]([https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/technical_report.pdf](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/detectron2/modeling/backbone/timm_backbone.py)) depending on the number of feature maps that can be obtained from the respective timm backbone.
+
+To train a Faster R-CNN with Deformable ResNet-101 backbone,run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_deformable_resnet101.yaml --isaid-path /path/to/isaid/root/folder
+```
+
+#### Using different loss functions
+To train a Faster R-CNN FPN-R101 with federated loss (+ sigmoid cross-entropy) , run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_fed_loss.yaml --isaid-path /path/to/isaid/root/folder
+```
+
+To train a Faster R-CNN FPN-R101 with focal loss, run the following command
+
+  ```bash
+ $ python plain_train_net.py --config-file ./configs/derived_configs/faster_rcnn_focal_loss.yaml --isaid-path /path/to/isaid/root/folder
+```
+
+#### Combining different components in a single config file
+You can use the different configurations together (e.g using specific backbone and loss function together) by merging the respective config files, and use the new config file for training.
+
+#### Other modifications
+We also explore other architectural modifications in the vanilla Faster R-CNN detector, please refer to our report and [base config](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/configs/Base-RCNN-FPN.yaml) file for additional details.
+
+
+

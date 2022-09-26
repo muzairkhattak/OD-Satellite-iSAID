@@ -8,7 +8,7 @@ This repository contains the code files for reproducing the main experiments men
 Complete technical report can be viewed [here](https://github.com/MUKhattak/OD-Satellite-iSAID/blob/OD_SatteliteImages/projects/OD_satellite_iSAID/technical_report.pdf).
 
 ## Requirements and Installation
-We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavly built on Detectron2. Follow the instructions below to setup the environment and install the dependencies.
+We have tested this code on Ubuntu 20.04 LTS with Python 3.8. This repo is heavily built on Detectron2. Follow the instructions below to setup the environment and install the dependencies.
  ```shell
  conda create -n detectron_OD python=3.8
  conda activate detectron_OD
